@@ -79,12 +79,14 @@
 
 
 
+<meta name="description" content="Spark部署Spark共有五种部署模式:Standalone、YARN、Kubernetes、Amazon EC2、Mesos，比较常用的是YARN和Kubernetes，这里介绍Spark On YARN部署模式。 准备1.硬件 ​    分布式模式至少需要2台服务器 2.需要的软件及版本 64位版本 OS:Centos 7.6.1810 jdk-8u241-linux-x64.tar.gz">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spark on Yarn部署">
-<meta property="og:url" content="http://yoursite.com/2020/02/04/Spark-on-Yarn%E9%83%A8%E7%BD%B2/index.html">
+<meta property="og:url" content="http://yoursite.com/2020/02/04/Spark%20On%20Yarn%E9%83%A8%E7%BD%B2/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Spark部署Spark共有五种部署模式:Standalone、YARN、Kubernetes、Amazon EC2、Mesos，比较常用的是YARN和Kubernetes，这里介绍Spark On YARN部署模式。 准备1.硬件 ​    分布式模式至少需要2台服务器 2.需要的软件及版本 64位版本 OS:Centos 7.6.1810 jdk-8u241-linux-x64.tar.gz">
 <meta property="article:published_time" content="2020-02-04T15:53:02.000Z">
-<meta property="article:modified_time" content="2020-02-04T15:53:02.853Z">
+<meta property="article:modified_time" content="2020-02-05T13:03:05.495Z">
 <meta property="article:author" content="子敏">
 <meta name="twitter:card" content="summary">
 
@@ -116,7 +118,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/02/04/Spark-on-Yarn部署/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/02/04/Spark On Yarn部署/"/>
 
 
 
@@ -239,7 +241,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/04/Spark-on-Yarn%E9%83%A8%E7%BD%B2/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/04/Spark%20On%20Yarn%E9%83%A8%E7%BD%B2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="子敏">
@@ -306,7 +308,25 @@
       
 
       
-        
+        <h2 id="Spark部署"><a href="#Spark部署" class="headerlink" title="Spark部署"></a>Spark部署</h2><p>Spark共有五种部署模式:Standalone、YARN、Kubernetes、Amazon EC2、Mesos，比较常用的是YARN和Kubernetes，这里介绍Spark On YARN部署模式。</p>
+<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p>1.硬件</p>
+<p>​    分布式模式至少需要2台服务器</p>
+<p>2.需要的软件及版本</p>
+<p>64位版本</p>
+<p>OS:Centos 7.6.1810</p>
+<p>jdk-8u241-linux-x64.tar.gz 最好Java 8以上版本</p>
+<p>scala-2.11.12.tgz 不同Spark对Scala版本兼容不同</p>
+<p>apache-zookeeper-3.5.6-bin.tar.gz</p>
+<p>hadoop-3.2.1.tar.gz</p>
+<p>spark-2.4.4-bin-hadoop2.7.tgz 使用官方提供的集成Hadoop版本，或者自己</p>
+<p>编译，该版本也兼容Hadoop 3</p>
+<p>3.角色分配</p>
+<p>主机1:Zookeeper、NameNode、DataNode、ZKFC、JournalNode、JobHistoryServer、ResourceManager、NodeManager</p>
+<p>主机2:NameNode、ResourceManager、NodeManager、DataNode</p>
+<p>4.安装路径</p>
+<p>5.部署步骤</p>
+<h3 id="系统"><a href="#系统" class="headerlink" title="系统"></a>系统</h3><p>每台服务都进行如下配置</p>
+<h2 id="防火墙"><a href="#防火墙" class="headerlink" title="防火墙"></a>防火墙</h2><h2 id="主机名"><a href="#主机名" class="headerlink" title="主机名"></a>主机名</h2><h2 id="配置hosts"><a href="#配置hosts" class="headerlink" title="配置hosts"></a>配置hosts</h2><h2 id="免密登录"><a href="#免密登录" class="headerlink" title="免密登录"></a>免密登录</h2><h2 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h2><h2 id="JDK安装"><a href="#JDK安装" class="headerlink" title="JDK安装"></a>JDK安装</h2><h2 id="Scala安装"><a href="#Scala安装" class="headerlink" title="Scala安装"></a>Scala安装</h2><h2 id="Zookeeper安装"><a href="#Zookeeper安装" class="headerlink" title="Zookeeper安装"></a>Zookeeper安装</h2><h2 id="Hadoop-3部署"><a href="#Hadoop-3部署" class="headerlink" title="Hadoop 3部署"></a>Hadoop 3部署</h2><h2 id="Spark-On-Yarn部署"><a href="#Spark-On-Yarn部署" class="headerlink" title="Spark On Yarn部署"></a>Spark On Yarn部署</h2><h2 id="测试验证"><a href="#测试验证" class="headerlink" title="测试验证"></a>测试验证</h2><h2 id="配置参数"><a href="#配置参数" class="headerlink" title="配置参数"></a>配置参数</h2>
       
     </div>
     
@@ -336,7 +356,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2020/02/04/Sparn-on-Kubernetes%E9%83%A8%E7%BD%B2/" rel="prev" title="Sparn-on-Kubernetes部署">
+              <a href="/2020/02/04/Sparn%20On%20Kubernetes%E9%83%A8%E7%BD%B2/" rel="prev" title="Sparn-on-Kubernetes部署">
                 Sparn-on-Kubernetes部署 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -390,8 +410,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -406,7 +435,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -433,6 +462,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark部署"><span class="nav-number">1.</span> <span class="nav-text">Spark部署</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#准备"><span class="nav-number">2.</span> <span class="nav-text">准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#系统"><span class="nav-number">2.1.</span> <span class="nav-text">系统</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#防火墙"><span class="nav-number">3.</span> <span class="nav-text">防火墙</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主机名"><span class="nav-number">4.</span> <span class="nav-text">主机名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置hosts"><span class="nav-number">5.</span> <span class="nav-text">配置hosts</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#免密登录"><span class="nav-number">6.</span> <span class="nav-text">免密登录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#环境变量"><span class="nav-number">7.</span> <span class="nav-text">环境变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JDK安装"><span class="nav-number">8.</span> <span class="nav-text">JDK安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Scala安装"><span class="nav-number">9.</span> <span class="nav-text">Scala安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Zookeeper安装"><span class="nav-number">10.</span> <span class="nav-text">Zookeeper安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hadoop-3部署"><span class="nav-number">11.</span> <span class="nav-text">Hadoop 3部署</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark-On-Yarn部署"><span class="nav-number">12.</span> <span class="nav-text">Spark On Yarn部署</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试验证"><span class="nav-number">13.</span> <span class="nav-text">测试验证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置参数"><span class="nav-number">14.</span> <span class="nav-text">配置参数</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
