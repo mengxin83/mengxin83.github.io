@@ -79,12 +79,14 @@
 
 
 
+<meta name="description" content="运行Example12345678910# 命令格式.&#x2F;bin&#x2F;run-example [options] example-class [example args]# Spark安装目录下执行,example定位的类的根路径是org.apache.spark.examples# SparkPi.&#x2F;bin&#x2F;run-example SparkPi 10.&#x2F;bin&#x2F;run-example JavaSpa">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spark应用执行">
 <meta property="og:url" content="http://yoursite.com/2020/02/05/Spark%E5%BA%94%E7%94%A8%E6%89%A7%E8%A1%8C/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="运行Example12345678910# 命令格式.&#x2F;bin&#x2F;run-example [options] example-class [example args]# Spark安装目录下执行,example定位的类的根路径是org.apache.spark.examples# SparkPi.&#x2F;bin&#x2F;run-example SparkPi 10.&#x2F;bin&#x2F;run-example JavaSpa">
 <meta property="article:published_time" content="2020-02-05T13:09:32.000Z">
-<meta property="article:modified_time" content="2020-02-05T13:09:32.850Z">
+<meta property="article:modified_time" content="2020-02-07T05:38:10.324Z">
 <meta property="article:author" content="子敏">
 <meta name="twitter:card" content="summary">
 
@@ -306,7 +308,31 @@
       
 
       
-        
+        <h1 id="运行Example"><a href="#运行Example" class="headerlink" title="运行Example"></a>运行Example</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 命令格式</span></span><br><span class="line">./bin/run-example [options] example-class [example args]</span><br><span class="line"><span class="meta">#</span><span class="bash"> Spark安装目录下执行,example定位的类的根路径是org.apache.spark.examples</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> SparkPi</span></span><br><span class="line">./bin/run-example SparkPi 10</span><br><span class="line">./bin/run-example JavaSparkPi 10</span><br><span class="line"><span class="meta">#</span><span class="bash"> NetworkWordCount注意要带上子包名streaming</span></span><br><span class="line">./bin/run-example NetworkWordCount localhost 9999</span><br><span class="line"><span class="meta">#</span><span class="bash"> 源码位置</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> examples目录下的Java和Scala样例代码</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="交互式"><a href="#交互式" class="headerlink" title="交互式"></a>交互式</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 命令格式</span></span><br><span class="line">./bin/spark-shell --master [uri][N] --jars xx.jar</span><br><span class="line"><span class="meta">#</span><span class="bash"> --master用来设置context将要连接并使用的资源主节点，master的值可以是standalone模式中spark的集群地址、yarn或mesos集群的URL，或是一个<span class="built_in">local</span>地址</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> --jars可以添加需要用到的jar包，通过逗号分隔来添加多个包</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="Pyspark"><a href="#Pyspark" class="headerlink" title="Pyspark"></a>Pyspark</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 命令格式</span></span><br><span class="line">./bin/pyspark --master [uri][N]</span><br><span class="line"><span class="meta">#</span><span class="bash"> --master用来设置context将要连接并使用的资源主节点，master的值可以是standalone模式中spark的集群地址、yarn或mesos集群的URL，或是一个<span class="built_in">local</span>地址</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> --jars可以添加需要用到的jar包，通过逗号分隔来添加多个包</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="Spark-Class"><a href="#Spark-Class" class="headerlink" title="Spark Class"></a>Spark Class</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 命令格式</span></span><br><span class="line">.bin/spark-class &lt;class&gt; [&lt;args&gt;]</span><br></pre></td></tr></table></figure>
+
+<h1 id="Beeline"><a href="#Beeline" class="headerlink" title="Beeline"></a>Beeline</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 启动thriftserver</span></span><br><span class="line">./sbin/start-thriftserver.sh</span><br><span class="line"><span class="meta">#</span><span class="bash"> 启动beeline</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="Spark-sql"><a href="#Spark-sql" class="headerlink" title="Spark-sql"></a>Spark-sql</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 命令格式</span></span><br><span class="line">spark-sql --master yarn</span><br></pre></td></tr></table></figure>
+
+<h1 id="R"><a href="#R" class="headerlink" title="R"></a>R</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 命令格式</span></span><br><span class="line">./bin/sparkR --master [uri][N]</span><br><span class="line"><span class="meta">#</span><span class="bash"> --master用来设置context将要连接并使用的资源主节点，master的值可以是standalone模式中spark的集群地址、yarn或mesos集群的URL，或是一个<span class="built_in">local</span>地址</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> --jars可以添加需要用到的jar包，通过逗号分隔来添加多个包</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="Spark-submit"><a href="#Spark-submit" class="headerlink" title="Spark-submit"></a>Spark-submit</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 命令格式</span></span><br><span class="line">spark-submit [options] &lt;python file&gt; [app arguments]</span><br><span class="line"><span class="meta">#</span><span class="bash"> 常用参数</span></span><br><span class="line">–master: 设置主节点 URL 的参数。支持：</span><br><span class="line">local： 本地机器。</span><br><span class="line">spark://host:port：远程 Spark 单机集群。</span><br><span class="line">yarn：yarn 集群</span><br><span class="line">–deploy-mode：允许选择是否在本地（使用 client 选项）启动 Spark 驱动程序，或者在集群内（使用 cluster 选项）的其中一台工作机器上启动。默认值是 client。</span><br><span class="line">–name：应用程序名称，也可在程序内设置。</span><br><span class="line">–py-files：.py, .egg 或者 .zip 文件的逗号分隔列表，包括 Python 应用程序。这些文件将分发给每个执行节点。</span><br><span class="line">–files：逗号分隔的文件列表，这些文件将分发给每个执行节点。</span><br><span class="line">–conf：动态地改变应用程序的配置。</span><br><span class="line">–driver-memory：指定应用程序在驱动节点上分配多少内存的参数，类似与 10000M， 2G。默认值是 1024M。</span><br><span class="line">–executor-memory：指定每个执行节点上为应用程序分配的内存，默认 1G。</span><br><span class="line">–num-executors：指定执行器节点数。</span><br><span class="line">–help：展示帮助信息和退出。</span><br></pre></td></tr></table></figure>
+
+<h2 id="Yarn-cluster模式"><a href="#Yarn-cluster模式" class="headerlink" title="Yarn-cluster模式"></a>Yarn-cluster模式</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">spark-submit \</span><br><span class="line">    --master yarn-cluster \  </span><br><span class="line">    --deploy-mode cluster \                  #集群运行模式</span><br><span class="line">    --name wordcount_$&#123;date&#125; \               #作业名</span><br><span class="line">    --queue production.group.yanghao \       #指定队列</span><br><span class="line">    --conf spark.default.parallelism=1000 \  #并行度，shuffle后的默认partition数 </span><br><span class="line">    --conf spark.network.timeout=1800s \</span><br><span class="line">    --conf spark.yarn.executor.memoryOverhead=1024 \   #堆外内存</span><br><span class="line">    --conf spark.scheduler.executorTaskBlacklistTime=30000 \</span><br><span class="line">    --conf spark.core.connection.ack.wait.timeout=300s \</span><br><span class="line">    --num-executors 200 \                   #executor数目 </span><br><span class="line">    --executor-memory 4G \                  #executor中堆的内存</span><br><span class="line">    --executor-cores 2 \                    #executor执行core的数目，设置大于1   </span><br><span class="line">    --driver-memory 2G \                    #driver内存，不用过大   </span><br><span class="line">    --class $&#123;main_class&#125; \                 #主类</span><br><span class="line">    $&#123;jar_path&#125; \                           #jar包位置</span><br><span class="line">    param_list \                            #mainClass接收的参数列表</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Yarn-client模式"><a href="#Yarn-client模式" class="headerlink" title="Yarn-client模式"></a>Yarn-client模式</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">spark-submit \</span><br><span class="line">    --master yarn-cluster \                  #集群运行模式</span><br><span class="line">    --name wordcount_$&#123;date&#125; \               #作业名</span><br><span class="line">    --queue production.group.yanghao \       #指定队列</span><br><span class="line">    --conf spark.default.parallelism=1000 \  #并行度，shuffle后的默认partition数 </span><br><span class="line">    --conf spark.network.timeout=1800s \</span><br><span class="line">    --conf spark.yarn.executor.memoryOverhead=1024 \   #堆外内存</span><br><span class="line">    --conf spark.scheduler.executorTaskBlacklistTime=30000 \</span><br><span class="line">    --conf spark.core.connection.ack.wait.timeout=300s \</span><br><span class="line">    --num-executors 200 \                   #executor数目 </span><br><span class="line">    --executor-memory 4G \                  #executor中堆的内存</span><br><span class="line">    --executor-cores 2 \                    #executor执行core的数目，设置大于1   </span><br><span class="line">    --driver-memory 2G \                    #driver内存，不用过大   </span><br><span class="line">    --class $&#123;main_class&#125; \                 #主类</span><br><span class="line">    $&#123;jar_path&#125; \                           #jar包位置</span><br><span class="line">    param_list \</span><br></pre></td></tr></table></figure>
+
+
       
     </div>
     
@@ -390,8 +416,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -433,6 +468,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#运行Example"><span class="nav-number">1.</span> <span class="nav-text">运行Example</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#交互式"><span class="nav-number">2.</span> <span class="nav-text">交互式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Pyspark"><span class="nav-number">3.</span> <span class="nav-text">Pyspark</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark-Class"><span class="nav-number">4.</span> <span class="nav-text">Spark Class</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Beeline"><span class="nav-number">5.</span> <span class="nav-text">Beeline</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark-sql"><span class="nav-number">6.</span> <span class="nav-text">Spark-sql</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#R"><span class="nav-number">7.</span> <span class="nav-text">R</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark-submit"><span class="nav-number">8.</span> <span class="nav-text">Spark-submit</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Yarn-cluster模式"><span class="nav-number">8.1.</span> <span class="nav-text">Yarn-cluster模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Yarn-client模式"><span class="nav-number">8.2.</span> <span class="nav-text">Yarn-client模式</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
