@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Spark," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Spark应用执行 Spark提供了交互式、后台、JDBC连接等多种应用执行方式，执行脚本在安装包的bin目录下">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spark应用执行">
+<meta property="og:url" content="http://yoursite.com/2020/02/10/Spark%E5%BA%94%E7%94%A8%E6%89%A7%E8%A1%8C/index.html">
+<meta property="og:site_name" content="子敏的码农生活">
+<meta property="og:description" content="Spark应用执行 Spark提供了交互式、后台、JDBC连接等多种应用执行方式，执行脚本在安装包的bin目录下">
+<meta property="article:published_time" content="2020-02-09T16:54:32.000Z">
+<meta property="article:modified_time" content="2020-02-09T16:59:54.924Z">
+<meta property="article:author" content="子敏">
+<meta property="article:tag" content="Spark">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/02/10/Spark应用执行/"/>
+
+
+
+
+
+  <title>Spark应用执行 | 子敏的码农生活</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">子敏的码农生活</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/10/Spark%E5%BA%94%E7%94%A8%E6%89%A7%E8%A1%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="子敏">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="子敏的码农生活">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Spark应用执行</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-10T00:54:32+08:00">
+                2020-02-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index">
+                    <span itemprop="name">大数据</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <ul>
+<li><p>Spark应用执行</p>
+<p>Spark提供了交互式、后台、JDBC连接等多种应用执行方式，执行脚本在安装包的bin目录下</p>
+<a id="more"></a>
+
+</li>
+</ul>
+<ul>
+<li>运行Example</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 命令格式</span></span><br><span class="line">./bin/run-example [options] example-class [example args]</span><br><span class="line"><span class="meta">#</span><span class="bash"> Spark安装目录下执行,example定位的类的根路径org.apache.spark.examples</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> SparkPi</span></span><br><span class="line">./bin/run-example SparkPi 10</span><br><span class="line">./bin/run-example JavaSparkPi 10</span><br><span class="line"><span class="meta">#</span><span class="bash"> NetworkWordCount注意要带上子包名streaming</span></span><br><span class="line">./bin/run-example streaming.NetworkWordCount localhost 9999</span><br><span class="line"><span class="meta">#</span><span class="bash"> 源码位置 安装包examples目录下的Java和Scala样例代码</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>交互式</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 命令格式</span></span><br><span class="line">./bin/spark-shell --master [uri][N] --jars xx.jar</span><br><span class="line"><span class="meta">#</span><span class="bash"> --master用来设置context将要连接并使用的资源主节点，master的值可以是standalone模式中spark的集群地址、yarn或mesos集群的URL，或是一个<span class="built_in">local</span>地址</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> --jars可以添加需要用到的jar包，通过逗号分隔来添加多个包</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Pyspark</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 命令格式</span></span><br><span class="line">./bin/pyspark --master [uri][N]</span><br><span class="line"><span class="meta">#</span><span class="bash"> --master用来设置context将要连接并使用的资源主节点，master的值可以是standalone模式中spark的集群地址、yarn或mesos集群的URL，或是一个<span class="built_in">local</span>地址</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> --jars可以添加需要用到的jar包，通过逗号分隔来添加多个包</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Spark Class</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 命令格式</span></span><br><span class="line">.bin/spark-class &lt;class&gt; [&lt;args&gt;]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Beeline</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 启动thriftserver</span></span><br><span class="line">./sbin/start-thriftserver.sh</span><br><span class="line"><span class="meta">#</span><span class="bash"> 启动beeline</span></span><br><span class="line">.sbin/beeline</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Spark-sql</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 命令格式</span></span><br><span class="line">spark-sql --master yarn</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>SparkR</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 命令格式</span></span><br><span class="line">./bin/sparkR --master [uri][N]</span><br><span class="line"><span class="meta">#</span><span class="bash"> --master用来设置context将要连接并使用的资源主节点，master的值可以是standalone模式中spark的集群地址、yarn或mesos集群的URL，或是一个<span class="built_in">local</span>地址</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> --jars可以添加需要用到的jar包，通过逗号分隔来添加多个包</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Spark-submit【重点】</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 命令格式</span></span><br><span class="line">spark-submit [options] &lt;python file&gt; [app arguments]</span><br><span class="line"><span class="meta">#</span><span class="bash"> 常用参数</span></span><br><span class="line">–master: 设置主节点 URL 的参数。支持：</span><br><span class="line">local： 本地机器。</span><br><span class="line">spark://host:port：远程 Spark 单机集群。</span><br><span class="line">yarn：yarn 集群</span><br><span class="line">–deploy-mode：允许选择是否在本地（使用 client 选项）启动 Spark 驱动程序，或者在集群内（使用 cluster 选项）的其中一台工作机器上启动。默认值是 client。</span><br><span class="line">–name：应用程序名称，也可在程序内设置。</span><br><span class="line">–py-files：.py, .egg 或者 .zip 文件的逗号分隔列表，包括 Python 应用程序。这些文件将分发给每个执行节点。</span><br><span class="line">–files：逗号分隔的文件列表，这些文件将分发给每个执行节点。</span><br><span class="line">–conf：动态地改变应用程序的配置。</span><br><span class="line">–driver-memory：指定应用程序在驱动节点上分配多少内存的参数，类似与 10000M， 2G。默认值是 1024M。</span><br><span class="line">–executor-memory：指定每个执行节点上为应用程序分配的内存，默认 1G。</span><br><span class="line">–num-executors：指定执行器节点数。</span><br><span class="line">–help：展示帮助信息和退出。</span><br></pre></td></tr></table></figure>
+
+<h2 id="Yarn-cluster模式"><a href="#Yarn-cluster模式" class="headerlink" title="Yarn-cluster模式"></a>Yarn-cluster模式</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">spark-submit \</span><br><span class="line">    --master yarn-cluster \                  #集群运行模式</span><br><span class="line">    --deploy-mode cluster \                  </span><br><span class="line">    --name wordcount_$&#123;date&#125; \               #作业名</span><br><span class="line">    --queue production.group.queue \         #指定队列</span><br><span class="line">    --conf spark.default.parallelism=1000 \  #并行度，shuffle后的默认partition数 </span><br><span class="line">    --conf spark.network.timeout=1800s \</span><br><span class="line">    --conf spark.yarn.executor.memoryOverhead=1024 \   #堆外内存</span><br><span class="line">    --conf spark.scheduler.executorTaskBlacklistTime=30000 \</span><br><span class="line">    --conf spark.core.connection.ack.wait.timeout=300s \</span><br><span class="line">    --num-executors 200 \                   #executor数目 </span><br><span class="line">    --executor-memory 4G \                  #executor中堆的内存</span><br><span class="line">    --executor-cores 2 \                    #executor执行core的数目，设置大于1   </span><br><span class="line">    --driver-memory 2G \                    #driver内存   </span><br><span class="line">    --class $&#123;main_class&#125; \                 #主类</span><br><span class="line">    $&#123;jar_path&#125; \                           #jar包位置</span><br><span class="line">    param_list \                            #mainClass接收的参数列表</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Yarn-client模式"><a href="#Yarn-client模式" class="headerlink" title="Yarn-client模式"></a>Yarn-client模式</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">spark-submit \</span><br><span class="line">    --master yarn-cluster \                  #集群运行模式</span><br><span class="line">    --name wordcount_$&#123;date&#125; \               #作业名</span><br><span class="line">    --queue production.group.queue \         #指定队列</span><br><span class="line">    --conf spark.default.parallelism=1000 \  #并行度，shuffle后的默认partition数 </span><br><span class="line">    --conf spark.network.timeout=1800s \</span><br><span class="line">    --conf spark.yarn.executor.memoryOverhead=1024 \   #堆外内存</span><br><span class="line">    --conf spark.scheduler.executorTaskBlacklistTime=30000 \</span><br><span class="line">    --conf spark.core.connection.ack.wait.timeout=300s \</span><br><span class="line">    --num-executors 200 \                   #executor数目 </span><br><span class="line">    --executor-memory 4G \                  #executor中堆的内存</span><br><span class="line">    --executor-cores 2 \                    #executor执行core的数目，设置大于1   </span><br><span class="line">    --driver-memory 2G \                    #driver内存  </span><br><span class="line">    --class $&#123;main_class&#125; \                 #主类</span><br><span class="line">    $&#123;jar_path&#125; \                           #jar包位置</span><br><span class="line">    param_list \</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spark/" rel="tag"># Spark</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/09/Spark%20on%20Yarn%E9%83%A8%E7%BD%B2/" rel="next" title="Spark on Yarn部署">
+                <i class="fa fa-chevron-left"></i> Spark on Yarn部署
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">子敏</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Yarn-cluster模式"><span class="nav-number">1.</span> <span class="nav-text">Yarn-cluster模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Yarn-client模式"><span class="nav-number">2.</span> <span class="nav-text">Yarn-client模式</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">子敏</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
