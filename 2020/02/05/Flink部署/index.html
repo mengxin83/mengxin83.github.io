@@ -79,12 +79,14 @@
 
 
 
+<meta name="description" content="Flinke支持多种部署模式:本地、集群（Standalone&#x2F;YARN）、云（GCE&#x2F;EC2） Spark On YARN部署在YARN上启动Flink有两种方式: 1.启动一个YARN session(Start a long-running Flink cluster on YARN) 2.直接在YARN上提交运行Flink作业(Run a Flink job on YARN) 步骤1234">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Flink部署">
 <meta property="og:url" content="http://yoursite.com/2020/02/05/Flink%E9%83%A8%E7%BD%B2/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="子敏的码农生活">
+<meta property="og:description" content="Flinke支持多种部署模式:本地、集群（Standalone&#x2F;YARN）、云（GCE&#x2F;EC2） Spark On YARN部署在YARN上启动Flink有两种方式: 1.启动一个YARN session(Start a long-running Flink cluster on YARN) 2.直接在YARN上提交运行Flink作业(Run a Flink job on YARN) 步骤1234">
 <meta property="article:published_time" content="2020-02-05T13:07:37.000Z">
-<meta property="article:modified_time" content="2020-02-05T13:07:37.244Z">
+<meta property="article:modified_time" content="2020-02-07T07:56:45.947Z">
 <meta property="article:author" content="子敏">
 <meta name="twitter:card" content="summary">
 
@@ -122,7 +124,7 @@
 
 
 
-  <title>Flink部署 | Hexo</title>
+  <title>Flink部署 | 子敏的码农生活</title>
   
 
 
@@ -152,7 +154,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Hexo</span>
+        <span class="site-title">子敏的码农生活</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -178,7 +180,7 @@
       
         
         <li class="menu-item menu-item-home">
-          <a href="/%20" rel="section">
+          <a href="/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
@@ -188,7 +190,7 @@
       
         
         <li class="menu-item menu-item-about">
-          <a href="/about/%20" rel="section">
+          <a href="/about/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
             
@@ -197,8 +199,18 @@
         </li>
       
         
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-categories">
-          <a href="/categories/%20" rel="section">
+          <a href="/categories/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
             
@@ -248,7 +260,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
+      <meta itemprop="name" content="子敏的码农生活">
     </span>
 
     
@@ -306,7 +318,19 @@
       
 
       
-        
+        <p>Flinke支持多种部署模式:本地、集群（Standalone/YARN）、云（GCE/EC2）</p>
+<h1 id="Spark-On-YARN部署"><a href="#Spark-On-YARN部署" class="headerlink" title="Spark On YARN部署"></a>Spark On YARN部署</h1><p>在YARN上启动Flink有两种方式:</p>
+<p>1.启动一个YARN session(Start a long-running Flink cluster on YARN)</p>
+<p>2.直接在YARN上提交运行Flink作业(Run a Flink job on YARN)</p>
+<h1 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 环境变量</span></span><br><span class="line">vim .bash_profile</span><br><span class="line"></span><br><span class="line">cd /home/deep/bigdata</span><br><span class="line">tar -zxvf flink-1.9.2-bin-scala_2.11.tgz</span><br><span class="line"><span class="meta">#</span><span class="bash"> 配置jobmanager节点</span></span><br><span class="line">vim conf/flink-conf.yaml</span><br><span class="line">jobmanager.rpc.address:DT1</span><br><span class="line"><span class="meta">#</span><span class="bash"> 配置taskmanager节点</span></span><br><span class="line">vim conf/slaves</span><br><span class="line">dt1</span><br><span class="line">dt2</span><br></pre></td></tr></table></figure>
+
+<h1 id="启动集群"><a href="#启动集群" class="headerlink" title="启动集群"></a>启动集群</h1><h1 id="停止集群"><a href="#停止集群" class="headerlink" title="停止集群"></a>停止集群</h1><h1 id="提交任务"><a href="#提交任务" class="headerlink" title="提交任务"></a>提交任务</h1><p>模式1 YARN Session</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 启动YARN Session</span></span><br><span class="line">./bin/yarn-session.sh -n 2 -jm 1024 -tm 1024 -s 2</span><br><span class="line"><span class="meta">#</span><span class="bash"> 提交作业</span></span><br><span class="line">./bin/flink run ./examples/batch/WordCount.jar \</span><br><span class="line">                          --input hdfs:///user/iteblog/LICENSE \</span><br><span class="line">                          --output hdfs:///user/iteblog/result.txt</span><br></pre></td></tr></table></figure>
+
+<p>模式2 直接提交作业</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./bin/flink run -m yarn-cluster -yn 2 ./examples/batch/WordCount.jar \</span><br><span class="line">                      --input hdfs:///user/iteblog/LICENSE \</span><br><span class="line">                      --output hdfs:///user/iteblog/result.txt</span><br></pre></td></tr></table></figure>
+
+
       
     </div>
     
@@ -394,8 +418,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -417,7 +450,25 @@
             
 
             
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
 
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
             
 
           </nav>
@@ -437,6 +488,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark-On-YARN部署"><span class="nav-number">1.</span> <span class="nav-text">Spark On YARN部署</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#步骤"><span class="nav-number">2.</span> <span class="nav-text">步骤</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#启动集群"><span class="nav-number">3.</span> <span class="nav-text">启动集群</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#停止集群"><span class="nav-number">4.</span> <span class="nav-text">停止集群</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#提交任务"><span class="nav-number">5.</span> <span class="nav-text">提交任务</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -461,15 +528,9 @@
 </div>
 
 
-  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
 
 
 
-  <span class="post-meta-divider">|</span>
-
-
-
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
 
 
 
