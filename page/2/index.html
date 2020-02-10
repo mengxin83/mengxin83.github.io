@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Spark on Kubernetes," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -79,16 +79,11 @@
 
 
 
-<meta name="description" content="概述基于kubernetes部署的有两种方式:  直接使用kubernetes作为集群管理器(Cluster Manager) standalone的方式">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Sparn on Kubernetes部署">
-<meta property="og:url" content="http://yoursite.com/2020/02/04/Sparn%20on%20Kubernetes%E9%83%A8%E7%BD%B2/index.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="子敏的码农生活">
+<meta property="og:url" content="http://yoursite.com/page/2/index.html">
 <meta property="og:site_name" content="子敏的码农生活">
-<meta property="og:description" content="概述基于kubernetes部署的有两种方式:  直接使用kubernetes作为集群管理器(Cluster Manager) standalone的方式">
-<meta property="article:published_time" content="2020-02-04T15:56:32.000Z">
-<meta property="article:modified_time" content="2020-02-10T02:32:17.884Z">
 <meta property="article:author" content="子敏">
-<meta property="article:tag" content="Spark on Kubernetes">
 <meta name="twitter:card" content="summary">
 
 
@@ -119,13 +114,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/02/04/Sparn on Kubernetes部署/"/>
+  <link rel="canonical" href="http://yoursite.com/page/2/"/>
 
 
 
 
 
-  <title>Sparn on Kubernetes部署 | 子敏的码农生活</title>
+  <title>子敏的码农生活</title>
   
 
 
@@ -144,7 +139,8 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-left 
+  page-home">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -237,9 +233,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-
-  <div id="posts" class="posts-expand">
+  <section id="posts" class="posts-expand">
     
+      
 
   
 
@@ -269,7 +265,9 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Sparn on Kubernetes部署</h1>
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/04/Sparn%20on%20Kubernetes%E9%83%A8%E7%BD%B2/" itemprop="url">Sparn on Kubernetes部署</a></h1>
         
 
         <div class="post-meta">
@@ -341,41 +339,20 @@
       
 
       
-        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>基于kubernetes部署的有两种方式:</p>
+        
+          <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>基于kubernetes部署的有两种方式:</p>
 <ul>
 <li>直接使用kubernetes作为集群管理器(Cluster Manager)</li>
 <li>standalone的方式</li>
 </ul>
-<a id="more"></a>
-
-<h1 id="软件及版本"><a href="#软件及版本" class="headerlink" title="软件及版本"></a>软件及版本</h1><p>docker-ce-17.03</p>
-<p>Kubernetes v1.16.x</p>
-<p>spark-2.4.4-bin-hadoop2.7.tgz</p>
-<h1 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h1><ul>
-<li>安装Docker</li>
-</ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum install -y yum-utils device-mapper-persistent-data lvm2 </span><br><span class="line"><span class="meta">#</span><span class="bash"> yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> yum install docker-ce-17.03.3.ce -y   <span class="comment">#目前kubeadm最大支持docker-ce-17.03，所以要指定该版本安装</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> systemctl <span class="built_in">enable</span> docker &amp;&amp; systemctl start docker</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>安装Kubernetes</li>
-</ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 添加阿里源</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> cat &lt;&lt; EOF &gt; /etc/yum.repos.d/kubernetes.repo</span></span><br><span class="line">[kubernetes]</span><br><span class="line">name=Kubernetes</span><br><span class="line">baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=1</span><br><span class="line">repo_gpgcheck=1</span><br><span class="line">gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装kubeadm、kubelet、kubectl</span></span><br><span class="line"><span class="comment"># yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes</span></span><br><span class="line"><span class="comment"># systemctl enable kubelet &amp;&amp; systemctl start kubelet</span></span><br><span class="line">注意：使用Docker时，kubeadm会自动检查kubelet的cgroup驱动程序，并/var/lib/kubelet/kubeadm-flags.env在运行时将其设置在文件中。如果使用的其他CRI，则必须在/etc/default/kubelet中cgroup-driver值修改为cgroupfs：</span><br><span class="line"></span><br><span class="line"><span class="comment"># cat /var/lib/kubelet/kubeadm-flags.env</span></span><br><span class="line">KUBELET_KUBEADM_ARGS=--cgroup-driver=cgroupfs --cni-bin-dir=/opt/cni/bin --cni-conf-dir=/etc/cni/net.d --network-plugin=cni</span><br><span class="line"><span class="comment"># systemctl daemon-reload</span></span><br><span class="line"><span class="comment"># systemctl restart kubelet</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>部署Spark</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建namespace</span></span><br><span class="line">kubectl create -f examples/staging/spark/namespace-spark-cluster.yaml</span><br><span class="line"><span class="comment"># 创建Master服务</span></span><br><span class="line">kubectl create -f examples/staging/spark/spark-master-controller.yaml</span><br><span class="line">kubectl create -f examples/staging/spark/spark-master-service.yaml</span><br><span class="line">kubectl get pods</span><br><span class="line"><span class="comment"># 创建worker</span></span><br><span class="line">kubectl create -f spark-worker-controller.yaml —namespace=spark-cluster</span><br><span class="line"><span class="comment"># 部署proxy</span></span><br><span class="line">kubectl create -f spark-ui-proxy-controller.yaml —namespace=spark-cluster</span><br><span class="line">kubectl create -f spark-ui-proxy-service.yaml —namespace=spark-cluster</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h2><ul>
-<li>cluster模式</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ bin/spark-submit \</span><br><span class="line">    --master k8s://https://&lt;k8s-apiserver-host&gt;:&lt;k8s-apiserver-port&gt; \</span><br><span class="line">    --deploy-mode cluster \</span><br><span class="line">    --name spark-pi \</span><br><span class="line">    --class org.apache.spark.examples.SparkPi \</span><br><span class="line">    --conf spark.executor.instances=5 \</span><br><span class="line">    --conf spark.kubernetes.container.image=&lt;spark-image&gt; \</span><br><span class="line">    <span class="built_in">local</span>:///path/to/examples.jar</span><br></pre></td></tr></table></figure>
-
-
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/02/04/Sparn%20on%20Kubernetes%E9%83%A8%E7%BD%B2/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
       
     </div>
     
@@ -390,36 +367,14 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/Spark-on-Kubernetes/" rel="tag"># Spark on Kubernetes</a>
-          
-        </div>
+
+      
+
       
 
       
       
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/02/09/Spark%20on%20Yarn%E9%83%A8%E7%BD%B2/" rel="prev" title="Spark on Yarn部署">
-                Spark on Yarn部署 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
+        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -429,11 +384,14 @@
   </article>
 
 
+    
+  </section>
 
-    <div class="post-spread">
-      
-    </div>
-  </div>
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/">&lt;i class&#x3D;&quot;fa fa-angle-left&quot;&gt;&lt;&#x2F;i&gt;</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+  </nav>
+
 
 
           </div>
@@ -441,10 +399,6 @@
 
 
           
-
-  
-
-
 
         </div>
         
@@ -465,17 +419,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -535,22 +480,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#软件及版本"><span class="nav-number">2.</span> <span class="nav-text">软件及版本</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装步骤"><span class="nav-number">3.</span> <span class="nav-text">安装步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#验证"><span class="nav-number">3.1.</span> <span class="nav-text">验证</span></a></li></ol></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -685,10 +614,6 @@
 
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
-
-
 
   
 
