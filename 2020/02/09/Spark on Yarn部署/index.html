@@ -79,14 +79,14 @@
 
 
 
-<meta name="description" content="Spark部署模式Spark共有五种部署模式:Standalone、YARN、Kubernetes、Amazon EC2、Mesos，比较常用的是YARN和Kubernetes，这里介绍Spark on YARN部署。">
+<meta name="description" content="Spark部署模式Spark共有五种部署模式:Standalone、YARN、Kubernetes、Amazon EC2、Mesos，比较常用的是YARN和Kubernetes，这里介绍Spark on YARN部署。本文档介绍HA版本的Hadoop 3.2.1和Spark 2.4.4的整合部署。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spark on Yarn部署">
 <meta property="og:url" content="http://yoursite.com/2020/02/09/Spark%20on%20Yarn%E9%83%A8%E7%BD%B2/index.html">
 <meta property="og:site_name" content="子敏的码农生活">
-<meta property="og:description" content="Spark部署模式Spark共有五种部署模式:Standalone、YARN、Kubernetes、Amazon EC2、Mesos，比较常用的是YARN和Kubernetes，这里介绍Spark on YARN部署。">
+<meta property="og:description" content="Spark部署模式Spark共有五种部署模式:Standalone、YARN、Kubernetes、Amazon EC2、Mesos，比较常用的是YARN和Kubernetes，这里介绍Spark on YARN部署。本文档介绍HA版本的Hadoop 3.2.1和Spark 2.4.4的整合部署。">
 <meta property="article:published_time" content="2020-02-09T13:42:03.000Z">
-<meta property="article:modified_time" content="2020-02-09T14:28:42.844Z">
+<meta property="article:modified_time" content="2020-02-11T07:17:43.357Z">
 <meta property="article:author" content="子敏">
 <meta property="article:tag" content="Spark on YARN">
 <meta name="twitter:card" content="summary">
@@ -341,7 +341,7 @@
       
 
       
-        <h1 id="Spark部署模式"><a href="#Spark部署模式" class="headerlink" title="Spark部署模式"></a>Spark部署模式</h1><p>Spark共有五种部署模式:Standalone、YARN、Kubernetes、Amazon EC2、Mesos，比较常用的是YARN和Kubernetes，这里介绍Spark on YARN部署。</p>
+        <h1 id="Spark部署模式"><a href="#Spark部署模式" class="headerlink" title="Spark部署模式"></a>Spark部署模式</h1><p>Spark共有五种部署模式:Standalone、YARN、Kubernetes、Amazon EC2、Mesos，比较常用的是YARN和Kubernetes，这里介绍Spark on YARN部署。本文档介绍HA版本的Hadoop 3.2.1和Spark 2.4.4的整合部署。</p>
 <a id="more"></a>
 
 <h1 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h1><ul>
@@ -351,24 +351,57 @@
 <ul>
 <li>需要的软件及版本</li>
 </ul>
-<p>OS:Centos 7.6.1810 (64位版本)</p>
-<p>jdk-8u241-linux-x64.tar.gz 64位最好Java 8以上版本</p>
-<p>scala-2.11.12.tgz 官网上Spark二进制安装包对应Scala版本不同，要看清楚</p>
-<p>apache-zookeeper-3.5.6-bin.tar.gz</p>
-<p>hadoop-3.2.1.tar.gz</p>
-<p>spark-2.4.4-bin-hadoop2.7.tgz 可以自己编译也可以使用官方编译好的版本，有集成Hadoop和没有集成Hadoop的安装包；该版本也兼容Hadoop 3</p>
+<table>
+<thead>
+<tr>
+<th>软件</th>
+<th>版本</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Centos</td>
+<td>7.6.1810</td>
+<td>64位版本</td>
+</tr>
+<tr>
+<td>jdk-8u241-linux-x64.tar.gz</td>
+<td>8u241</td>
+<td>最好Java 8以上版本</td>
+</tr>
+<tr>
+<td>scala-2.11.12.tgz</td>
+<td>2.11.12</td>
+<td>官网上Spark二进制安装包对应Scala版本不同，要看清楚</td>
+</tr>
+<tr>
+<td>apache-zookeeper-3.5.6-bin.tar.gz</td>
+<td>3.5.6</td>
+<td></td>
+</tr>
+<tr>
+<td>hadoop-3.2.1.tar.gz</td>
+<td>3.2.1</td>
+<td></td>
+</tr>
+<tr>
+<td>spark-2.4.4-bin-hadoop2.7.tgz</td>
+<td>2.4.4</td>
+<td>可以自己编译也可以使用官方编译好的版本，有集成Hadoop和没有集成Hadoop的安装包；该版本也兼容Hadoop 3</td>
+</tr>
+</tbody></table>
 <ul>
 <li>角色分配</li>
 </ul>
 <p>主机1:Zookeeper、NameNode、DataNode、ZKFC、JournalNode、JobHistoryServer、ResourceManager、NodeManager</p>
-<p>主机2:NameNode、ZKFC、ResourceManager、NodeManager、DataNode</p>
+<p>主机2:NameNode、DataNode、ZKFC、ResourceManager、NodeManager</p>
 <p>通过Spark on YARN模式提交任务不需要启动Spark的Master和Worker服务</p>
 <ul>
 <li>安装路径</li>
 </ul>
 <p>所有服务器安装路径，用户相同</p>
 <p>安装用户:deep 所有系统密码统一，不要使用root部署和启动服务</p>
-<p>安装根路径:/home/deep/bigdata (自己规划，一般放在/opt下)</p>
+<p>安装根路径:/home/deep/bigdata (自己规划，可放在/opt下)</p>
 <h1 id="部署步骤"><a href="#部署步骤" class="headerlink" title="部署步骤"></a>部署步骤</h1><h2 id="系统"><a href="#系统" class="headerlink" title="系统"></a>系统</h2><p>每台服务都进行如下配置:</p>
 <ul>
 <li><p>防火墙</p>
@@ -379,7 +412,7 @@
 
 <ul>
 <li><p>主机名</p>
-<p>2台主机名分别为DT1和DT2</p>
+<p>2台主机分别命名为DT1和DT2</p>
 </li>
 </ul>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> root执行</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 临时修改</span></span><br><span class="line">hostname DT1</span><br><span class="line"><span class="meta">#</span><span class="bash"> 永久修改,需要重启</span></span><br><span class="line">hostnamectl set-hostname DT1</span><br></pre></td></tr></table></figure>
@@ -394,7 +427,7 @@
 <p>安装用户deep免密登录</p>
 </li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> deep执行,在所有服务器执行以下命令</span></span><br><span class="line">ssh-keygen -t rsa</span><br><span class="line">ssh-copy-id -i ~/.ssh/id_rsa.pub DT1</span><br><span class="line">ssh-copy-id -i ~/.ssh/id_rsa.pub</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> deep执行,在所有服务器执行以下命令</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> ssh-copy-id命令可以把本地主机的公钥复制到远程主机的authorized_keys文件上，ssh-copy-id命令也会给远程主机的用户主目录（home）和~/.ssh, 和~/.ssh/authorized_keys设置合适的权限</span></span><br><span class="line">ssh-keygen -t rsa</span><br><span class="line">ssh-copy-id -i ~/.ssh/id_rsa.pub DT1</span><br><span class="line">ssh-copy-id -i ~/.ssh/id_rsa.pub DT2</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><p>环境变量</p>
@@ -411,7 +444,9 @@
 
 <h2 id="Zookeeper安装"><a href="#Zookeeper安装" class="headerlink" title="Zookeeper安装"></a>Zookeeper安装</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /home/deep/bigdata</span><br><span class="line">tar -zxvf apache-zookeeper-3.5.6-bin.tar.gz</span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改配置文件</span></span><br><span class="line">cp conf/zoo-sample.cfg zoo.cfg</span><br><span class="line">vim zoo.cfg</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># -----------配置文件内容如下----------</span></span><br><span class="line"><span class="comment"># synchronization phase can take</span></span><br><span class="line"><span class="attr">initLimit</span>=<span class="string">10</span></span><br><span class="line"><span class="comment"># The number of ticks that can pass between </span></span><br><span class="line"><span class="comment"># sending a request and getting an acknowledgement</span></span><br><span class="line"><span class="attr">syncLimit</span>=<span class="string">5</span></span><br><span class="line"><span class="comment"># the directory where the snapshot is stored.</span></span><br><span class="line"><span class="comment"># do not use /tmp for storage, /tmp here is just </span></span><br><span class="line"><span class="comment"># example sakes.</span></span><br><span class="line"><span class="attr">dataDir</span>=<span class="string">/home/deep/bigdata/apache-zookeeper-3.5.6-bin/data</span></span><br><span class="line"><span class="attr">dataLogDir</span>=<span class="string">/home/deep/bigdata/apache-zookeeper-3.5.6-bin/logs</span></span><br><span class="line"><span class="comment"># the port at which the clients will connect</span></span><br><span class="line"><span class="attr">clientPort</span>=<span class="string">2181</span></span><br><span class="line"><span class="meta">admin.serverPort</span>=<span class="string">8787</span></span><br><span class="line"><span class="comment"># the maximum number of client connections.</span></span><br><span class="line"><span class="comment"># increase this if you need to handle more clients</span></span><br><span class="line"><span class="comment">#maxClientCnxns=60</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Be sure to read the maintenance section of the </span></span><br><span class="line"><span class="comment"># administrator guide before turning on autopurge.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># http://zookeeper.apache.org/doc/current/zookeeperAdmin.html#sc_maintenance</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># The number of snapshots to retain in dataDir</span></span><br><span class="line"><span class="comment">#autopurge.snapRetainCount=3</span></span><br><span class="line"><span class="comment"># Purge task interval in hours</span></span><br><span class="line"><span class="comment"># Set to "0" to disable auto purge feature</span></span><br><span class="line"><span class="comment">#autopurge.purgeInterval=1</span></span><br><span class="line"><span class="meta">server.1</span>=<span class="string">dt1:2888:3888</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在dataDir目录下创建myid文件,写入如下内容:</span></span><br><span class="line"><span class="attr">echo</span> <span class="string">'1' &gt; myid</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -----------配置文件内容如下----------</span></span><br><span class="line"><span class="comment"># synchronization phase can take</span></span><br><span class="line"><span class="attr">initLimit</span>=<span class="string">10</span></span><br><span class="line"><span class="comment"># The number of ticks that can pass between </span></span><br><span class="line"><span class="comment"># sending a request and getting an acknowledgement</span></span><br><span class="line"><span class="attr">syncLimit</span>=<span class="string">5</span></span><br><span class="line"><span class="comment"># the directory where the snapshot is stored.</span></span><br><span class="line"><span class="comment"># do not use /tmp for storage, /tmp here is just </span></span><br><span class="line"><span class="comment"># example sakes.</span></span><br><span class="line"><span class="attr">dataDir</span>=<span class="string">/home/deep/bigdata/apache-zookeeper-3.5.6-bin/data</span></span><br><span class="line"><span class="attr">dataLogDir</span>=<span class="string">/home/deep/bigdata/apache-zookeeper-3.5.6-bin/logs</span></span><br><span class="line"><span class="comment"># the port at which the clients will connect</span></span><br><span class="line"><span class="attr">clientPort</span>=<span class="string">2181</span></span><br><span class="line"><span class="meta">admin.serverPort</span>=<span class="string">8787</span></span><br><span class="line"><span class="comment"># the maximum number of client connections.</span></span><br><span class="line"><span class="comment"># increase this if you need to handle more clients</span></span><br><span class="line"><span class="comment">#maxClientCnxns=60</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Be sure to read the maintenance section of the </span></span><br><span class="line"><span class="comment"># administrator guide before turning on autopurge.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># http://zookeeper.apache.org/doc/current/zookeeperAdmin.html#sc_maintenance</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># The number of snapshots to retain in dataDir</span></span><br><span class="line"><span class="comment">#autopurge.snapRetainCount=3</span></span><br><span class="line"><span class="comment"># Purge task interval in hours</span></span><br><span class="line"><span class="comment"># Set to "0" to disable auto purge feature</span></span><br><span class="line"><span class="comment">#autopurge.purgeInterval=1</span></span><br><span class="line"><span class="meta">server.1</span>=<span class="string">dt1:2888:3888</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 在dataDir目录下创建myid文件,写入如下内容:</span></span><br><span class="line">echo '1' &gt; myid</span><br></pre></td></tr></table></figure>
 
 <h2 id="Hadoop-3-HA部署"><a href="#Hadoop-3-HA部署" class="headerlink" title="Hadoop 3 HA部署"></a>Hadoop 3 HA部署</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /home/deep/bigdata</span><br><span class="line">tar -zxvf hadoop-3.2.1.tar.gz</span><br></pre></td></tr></table></figure>
 
@@ -471,7 +506,7 @@
 </ul>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">spark-submit --class org.apache.spark.examples.JavaWordCount --master yarn --deploy-mode cluster /home/deep/bigdata/spark-2.4.4-bin-hadoop2.7/examples/jars.spark-examples_2.11-2.4.4.jar hdfs://[hdfsnamespace]/[filename]</span><br></pre></td></tr></table></figure>
 
-<h1 id="常用配置参数"><a href="#常用配置参数" class="headerlink" title="常用配置参数"></a>常用配置参数</h1>
+
       
     </div>
     
@@ -645,7 +680,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark部署模式"><span class="nav-number">1.</span> <span class="nav-text">Spark部署模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#准备"><span class="nav-number">2.</span> <span class="nav-text">准备</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#部署步骤"><span class="nav-number">3.</span> <span class="nav-text">部署步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#系统"><span class="nav-number">3.1.</span> <span class="nav-text">系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JDK安装"><span class="nav-number">3.2.</span> <span class="nav-text">JDK安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Scala安装"><span class="nav-number">3.3.</span> <span class="nav-text">Scala安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Zookeeper安装"><span class="nav-number">3.4.</span> <span class="nav-text">Zookeeper安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hadoop-3-HA部署"><span class="nav-number">3.5.</span> <span class="nav-text">Hadoop 3 HA部署</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark-On-Yarn部署"><span class="nav-number">3.6.</span> <span class="nav-text">Spark On Yarn部署</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#spark-env-sh"><span class="nav-number">3.6.1.</span> <span class="nav-text">spark-env.sh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#slaves"><span class="nav-number">3.6.2.</span> <span class="nav-text">slaves</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#测试验证"><span class="nav-number">4.</span> <span class="nav-text">测试验证</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#常用配置参数"><span class="nav-number">5.</span> <span class="nav-text">常用配置参数</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark部署模式"><span class="nav-number">1.</span> <span class="nav-text">Spark部署模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#准备"><span class="nav-number">2.</span> <span class="nav-text">准备</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#部署步骤"><span class="nav-number">3.</span> <span class="nav-text">部署步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#系统"><span class="nav-number">3.1.</span> <span class="nav-text">系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JDK安装"><span class="nav-number">3.2.</span> <span class="nav-text">JDK安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Scala安装"><span class="nav-number">3.3.</span> <span class="nav-text">Scala安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Zookeeper安装"><span class="nav-number">3.4.</span> <span class="nav-text">Zookeeper安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hadoop-3-HA部署"><span class="nav-number">3.5.</span> <span class="nav-text">Hadoop 3 HA部署</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark-On-Yarn部署"><span class="nav-number">3.6.</span> <span class="nav-text">Spark On Yarn部署</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#spark-env-sh"><span class="nav-number">3.6.1.</span> <span class="nav-text">spark-env.sh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#slaves"><span class="nav-number">3.6.2.</span> <span class="nav-text">slaves</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#测试验证"><span class="nav-number">4.</span> <span class="nav-text">测试验证</span></a></li></ol></div>
             
 
           </div>
