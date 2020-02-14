@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="子敏的码农生活">
 <meta property="og:description" content="Flinke支持多种部署模式:本地、集群（Standalone&#x2F;YARN）、云（GCE&#x2F;EC2） Flink On YARN部署在YARN上启动Flink有两种方式: 1.启动一个YARN session(Start a long-running Flink cluster on YARN) 2.直接在YARN上提交运行Flink作业(Run a Flink job on YARN)">
 <meta property="article:published_time" content="2020-02-10T02:35:37.000Z">
-<meta property="article:modified_time" content="2020-02-13T11:05:33.729Z">
+<meta property="article:modified_time" content="2020-02-14T10:57:22.362Z">
 <meta property="article:author" content="子敏">
 <meta property="article:tag" content="Flink">
 <meta name="twitter:card" content="summary">
@@ -347,18 +347,19 @@
 <p>2.直接在YARN上提交运行Flink作业(Run a Flink job on YARN)</p>
 <a id="more"></a>
 
-<h1 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">cd /home/deep/bigdata</span><br><span class="line">tar -zxvf flink-1.10.0-bin-scala_2.11.tgz</span><br><span class="line"><span class="meta">#</span><span class="bash"> 配置jobmanager节点</span></span><br><span class="line">vim conf/flink-conf.yaml</span><br><span class="line"><span class="meta">#</span><span class="bash"> 添加以下内容</span></span><br><span class="line">jobmanager.rpc.address:DT1</span><br><span class="line">jobmanager.web.address:0.0.0.0</span><br><span class="line"><span class="meta">#</span><span class="bash"> 配置taskmanager节点</span></span><br><span class="line">vim conf/slaves</span><br><span class="line">dt1</span><br><span class="line">dt2</span><br></pre></td></tr></table></figure>
+<h1 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /home/deep/bigdata</span><br><span class="line">tar -zxvf flink-1.10.0-bin-scala_2.11.tgz</span><br></pre></td></tr></table></figure>
 
-<h1 id="启动集群"><a href="#启动集群" class="headerlink" title="启动集群"></a>启动集群</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/start-cluster.sh</span><br></pre></td></tr></table></figure>
 
-<h1 id="停止集群"><a href="#停止集群" class="headerlink" title="停止集群"></a>停止集群</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/stop-cluster.sh</span><br></pre></td></tr></table></figure>
 
-<h1 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h1><p>WEBUI:ip:8081</p>
-<h1 id="提交任务"><a href="#提交任务" class="headerlink" title="提交任务"></a>提交任务</h1><p>模式1 YARN Session</p>
+<h1 id="提交任务"><a href="#提交任务" class="headerlink" title="提交任务"></a>提交任务</h1><ul>
+<li>模式1 YARN Session</li>
+</ul>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 启动YARN Session</span></span><br><span class="line">./bin/yarn-session.sh -n 2 -jm 1024 -tm 1024 -s 2</span><br><span class="line"><span class="meta">#</span><span class="bash"> 提交作业</span></span><br><span class="line">./bin/flink run ./examples/batch/WordCount.jar \</span><br><span class="line">                          --input hdfs://dt/hadoop-env.sh \</span><br><span class="line">                          --output hdfs://dt/result.txt</span><br></pre></td></tr></table></figure>
 
-<p>模式2 直接提交作业</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./bin/flink run -m yarn-cluster -yn 2 ./examples/batch/WordCount.jar \</span><br><span class="line">                      --input hdfs:///user/iteblog/LICENSE \</span><br><span class="line">                      --output hdfs:///user/iteblog/result.txt</span><br></pre></td></tr></table></figure>
+<ul>
+<li>模式2 直接提交作业</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./bin/flink run -m yarn-cluster -yjm 1024 -ytm 1024 ./examples/batch/WordCount.jar \</span><br><span class="line">                      --input hdfs://dt/hadoop-env.sh \</span><br><span class="line">                      --output hdfs://dt/result.txt</span><br></pre></td></tr></table></figure>
 
 
       
@@ -534,7 +535,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Flink-On-YARN部署"><span class="nav-number">1.</span> <span class="nav-text">Flink On YARN部署</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装步骤"><span class="nav-number">2.</span> <span class="nav-text">安装步骤</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#启动集群"><span class="nav-number">3.</span> <span class="nav-text">启动集群</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#停止集群"><span class="nav-number">4.</span> <span class="nav-text">停止集群</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#验证"><span class="nav-number">5.</span> <span class="nav-text">验证</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#提交任务"><span class="nav-number">6.</span> <span class="nav-text">提交任务</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Flink-On-YARN部署"><span class="nav-number">1.</span> <span class="nav-text">Flink On YARN部署</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装步骤"><span class="nav-number">2.</span> <span class="nav-text">安装步骤</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#提交任务"><span class="nav-number">3.</span> <span class="nav-text">提交任务</span></a></li></ol></div>
             
 
           </div>
