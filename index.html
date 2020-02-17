@@ -318,8 +318,7 @@
 
       
         
-          
-            <h1 id="常见数据源"><a href="#常见数据源" class="headerlink" title="常见数据源"></a>常见数据源</h1><ul>
+          <h1 id="常见数据源"><a href="#常见数据源" class="headerlink" title="常见数据源"></a>常见数据源</h1><ul>
 <li>文件系统与文件格式</li>
 </ul>
 <p>对于存储在本地文件系统或分布式文件系统（比如NFS、HDFS、Amazon S3 等）中的数据，Spark 可以访问很多种不同的文件格式，包括文本文件、CSV、JSON、SequenceFile、protocol buffer以及对象文件。</p>
@@ -331,168 +330,13 @@
 <li>数据库与键值存储</li>
 </ul>
 <p>Spark 自带的库和一些第三方库，可以用来连接Cassandra、HBase、Elasticsearch 以及JDBC 源。</p>
-<h1 id="文本文件"><a href="#文本文件" class="headerlink" title="文本文件"></a>文本文件</h1><ul>
-<li>将一个文本文件读取为RDD 时，输入的每一行都会成为RDD 的一个元素。</li>
-<li>将多个完整的文本文件一次性读取为一个pair RDD，其中键是文件名，值是文件内容。</li>
-</ul>
-<h2 id="读取本地文件"><a href="#读取本地文件" class="headerlink" title="读取本地文件"></a>读取本地文件</h2><ul>
-<li>读取单个文件：textFile(fileName，minPartitions) ，如果要控制分区数的话，可以指定minPartitions。</li>
-</ul>
-<p><strong>注意：</strong>textFile()方法也可以读取文件夹，将目录作为参数，会将目录中的数据都读入到RDD中。</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//在Scala中读取一个文件</span></span><br><span class="line"><span class="keyword">val</span> input = sc.textFile(<span class="string">"file:///home/deep/bigdata/spark-2.4.4-bin-hadoop2.7/README.md"</span>)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>读取一个目录中的文件：wholeTextFiles()，方法会返回一个pair RDD，其中键是输入文件的文件名。</li>
-</ul>
-<p>Spark 支持读取给定目录中的所有文件，以及在输入路径中使用通配字符（如part-*.txt）。</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//使用wholeTextFiles读取文件夹</span></span><br><span class="line"><span class="keyword">val</span> input = sc.wholeTextFiles(<span class="string">"/home/deep/bigdata/spark-2.4.4-bin-hadoop2.7/conf"</span>)</span><br><span class="line">input.collect().foreach(println)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">使用textFile读取文件夹</span><br><span class="line"><span class="keyword">val</span> input = sc.textFile(<span class="string">"/home/deep/bigdata/spark-2.4.4-bin-hadoop2.7/conf"</span>)</span><br><span class="line">input.collect().foreach(println)</span><br></pre></td></tr></table></figure>
-
-<h2 id="保存本地文件"><a href="#保存本地文件" class="headerlink" title="保存本地文件"></a>保存本地文件</h2><p>saveAsTextFile() 方法接收一个路径，并将RDD 中的内容都输入到路径对应的文件中。Spark 将传入的路径作为目录对待，会在那个目录下输出多个文件。</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//在Scala中将数据保存为文本文件</span></span><br><span class="line">inputRDD.saveAsTextFile(outputFile)</span><br></pre></td></tr></table></figure>
-
-<h1 id="JSON文件"><a href="#JSON文件" class="headerlink" title="JSON文件"></a>JSON文件</h1><ul>
-<li><p>读取JSON 数据的最简单的方式是将数据作为文本文件读取，然后使用JSON 解析器来对RDD 中的值进行映射操作。</p>
-</li>
-<li><p>也可以使用JSON 序列化库来将数据转为字符串，然后将其写出去。</p>
-</li>
-<li><p>在Java 和Scala 中也可以使用一个自定义Hadoop 格式来操作JSON 数据。</p>
-</li>
-<li><p>还可以使用Spark SQL 读取JSON 数据。</p>
-</li>
-</ul>
-<p>测试JSON文件</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">"name"</span>:<span class="string">"王阳"</span>,<span class="attr">"age"</span>:<span class="number">32</span>&#125;</span><br><span class="line">&#123;<span class="attr">"name"</span>:<span class="string">"李伟"</span>,<span class="attr">"age"</span>:<span class="number">22</span>&#125;</span><br><span class="line">&#123;<span class="attr">"name"</span>:<span class="string">"刘涵"</span>,<span class="attr">"age"</span>:<span class="number">41</span>&#125;</span><br><span class="line">&#123;<span class="attr">"name"</span>:<span class="string">"张丽"</span>,<span class="attr">"age"</span>:<span class="number">23</span>&#125;</span><br><span class="line">&#123;<span class="attr">"name"</span>:<span class="string">"杨梅"</span>,<span class="attr">"age"</span>:<span class="number">34</span>&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>读取JSON文件</strong><br>使用Jackson来解析JSON文件</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.json4s.<span class="type">ShortTypeHints</span></span><br><span class="line"><span class="keyword">import</span> org.json4s.jackson.<span class="type">JsonMethods</span>._</span><br><span class="line"><span class="keyword">import</span> org.json4s.jackson.<span class="type">Serialization</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span>(<span class="params">name:<span class="type">String</span>,age:<span class="type">Int</span></span>)</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">implicit</span> <span class="title">val</span> <span class="title">formats</span> </span>= <span class="type">Serialization</span>.formats(<span class="type">ShortTypeHints</span>(<span class="type">List</span>()))</span><br><span class="line"><span class="keyword">val</span> input = sc.textFile(<span class="string">"/user/admin/mrwinter/chapter05/person.json"</span>)</span><br><span class="line"><span class="keyword">val</span> result = input.collect().map(x =&gt; parse(x).extract[<span class="type">Person</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">//保存JSON文件用saveASTextFile(outputFile)即可</span></span><br><span class="line"><span class="keyword">val</span> save_json = sc.parallelize(result)</span><br><span class="line">save_json.saveAsTextFile(<span class="string">"/user/admin/mrwinter/chapter05/save_person.json"</span>)</span><br></pre></td></tr></table></figure>
-
-<h1 id="CSV文件"><a href="#CSV文件" class="headerlink" title="CSV文件"></a>CSV文件</h1><p>逗号分隔值（CSV）文件每行都有固定数目的字段，字段间用逗号隔开（在制表符分隔值文件，即TSV 文件中用制表符隔开）。</p>
-<ul>
-<li>读取CSV</li>
-</ul>
-<p>读取CSV/TSV 数据和读取JSON 数据相似，都需要先把文件当作普通文本文件来读取数据，再对数据进行处理。</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//在Scala 中使用textFile() 读取CSV</span></span><br><span class="line"><span class="keyword">import</span> java.io.<span class="type">StringReader</span></span><br><span class="line"><span class="keyword">import</span> au.com.bytecode.opencsv.<span class="type">CSVReader</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> input = sc.textFile(<span class="string">"/user/admin/mrwinter/chapter05/animal.csv"</span>)</span><br><span class="line"><span class="keyword">val</span> result = input.map&#123; line =&gt;</span><br><span class="line">  <span class="keyword">val</span> reader = <span class="keyword">new</span> <span class="type">CSVReader</span>(<span class="keyword">new</span> <span class="type">StringReader</span>(line))</span><br><span class="line">  reader.readNext()</span><br><span class="line">&#125;</span><br><span class="line">result.collect().foreach(x =&gt; println(x(<span class="number">0</span>), x(<span class="number">1</span>)))</span><br></pre></td></tr></table></figure>
-
-<h1 id="SequenceFile"><a href="#SequenceFile" class="headerlink" title="SequenceFile"></a>SequenceFile</h1><p>Spark有专门的读取SequenceFile的方法，其存储结构为key-value形式，在 SparkContext 中，可以</p>
-<p>调用 sequenceFile<a href="path">keyClass,valueClass</a></p>
-<ul>
-<li>从HDFS读取Sequence文件</li>
-</ul>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> <span class="type">SparkConf</span> = <span class="keyword">new</span> <span class="type">SparkConf</span>().setAppName(<span class="string">"SparkContextApp"</span>).setMaster(<span class="string">"local[2]"</span>)</span><br><span class="line"><span class="keyword">val</span> sc = <span class="keyword">new</span> <span class="type">SparkContext</span>(<span class="type">SparkConf</span>)</span><br><span class="line"><span class="keyword">val</span> rdd = sc.sequenceFile[<span class="type">Int</span>,<span class="type">String</span>](<span class="string">"hdfs://dt/test"</span>)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>保存Sequence文件</li>
-</ul>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rdd.saveAsSequenceFile(<span class="string">"file:///opt/module/spark/seqFile"</span>)</span><br></pre></td></tr></table></figure>
-
-<h1 id="对象文件"><a href="#对象文件" class="headerlink" title="对象文件"></a>对象文件</h1><p>对象文件是将对象序列化后保存的文件，采用 Java 的序列化机制。可以通过objectFile<a href="path">k,v</a> 函数接收一个路径，读取对象文件，返回对应的 RDD，也可以通过调用 saveAsObjectFile() 实现对对象文件的输出。因为是序列化所以要指定类型。</p>
-<ul>
-<li>从HDFS读取对象文件</li>
-</ul>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> <span class="type">SparkConf</span> = <span class="keyword">new</span> <span class="type">SparkConf</span>().setAppName(<span class="string">"SparkContextApp"</span>).setMaster(<span class="string">"local[2]"</span>)</span><br><span class="line"><span class="keyword">val</span> sc = <span class="keyword">new</span> <span class="type">SparkContext</span>(<span class="type">SparkConf</span>)</span><br><span class="line"><span class="keyword">val</span> rdd = sc.objectFile[<span class="type">Int</span>,<span class="type">String</span>](<span class="string">"hdfs://dt/test"</span>)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>保存Object文件</li>
-</ul>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rdd.saveAsObjectFile(<span class="string">"file:///opt/module/spark/objectFile"</span>)</span><br></pre></td></tr></table></figure>
-
-<h1 id="Hadoop"><a href="#Hadoop" class="headerlink" title="Hadoop"></a>Hadoop</h1><ul>
-<li>兼容旧版本HadoopAPI的创建操作</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th align="center">API</th>
-<th align="center">键类型</th>
-<th align="center">值类型</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">textFile(path: String, minPartitions: Int = defaultMinPartitions)</td>
-<td align="center">LongWritable</td>
-<td align="center">Text</td>
-</tr>
-<tr>
-<td align="center">hadoopFile[K, V, F &lt;: InputFormat[K, V]](path: String, minPartitions: Int)(implicit km: ClassTag[K], vm: ClassTag[V], fm: ClassTag[F]): RDD[(K, V)]</td>
-<td align="center">K</td>
-<td align="center">V</td>
-</tr>
-<tr>
-<td align="center">hadoopFile[K, V, F &lt;:      [K, V]](path: String)(implicit km: ClassTag[K], vm: ClassTag[V], fm: ClassTag[F]): RDD[(K, V)]</td>
-<td align="center">K</td>
-<td align="center">V</td>
-</tr>
-<tr>
-<td align="center">hadoopFile[K, V](path: String, inputFormatClass: Class[_ &lt;: InputFormat[K, V]], keyClass: Class[K], valueClass: Class[V], minPartitions: Int = defaultMinPartitions): RDD[(K, V)]</td>
-<td align="center">keyClass</td>
-<td align="center">valueClass</td>
-</tr>
-<tr>
-<td align="center">hadoopRDD[K, V](conf: JobConf, inputFormatClass: Class[_ &lt;: InputFormat[K, V]], keyClass: Class[K], valueClass: Class[V], minPartitions: Int = defaultMinPartitions): RDD[(K, V)]</td>
-<td align="center">keyClass</td>
-<td align="center">valueClass</td>
-</tr>
-<tr>
-<td align="center">sequenceFile[K, V](path: String, minPartitions: Int = defaultMinPartitions)(implicit km: ClassTag[K], vm: ClassTag[V], kcf: () ⇒ WritableConverter[K], vcf: () ⇒ WritableConverter[V]): RDD[(K, V)]</td>
-<td align="center">K</td>
-<td align="center">V</td>
-</tr>
-<tr>
-<td align="center">objectFile[T](path: String, minPartitions: Int = defaultMinPartitions)(implicit arg0: ClassTag[T]): RDD[T]</td>
-<td align="center">NullWritable</td>
-<td align="center">BytesWritable</td>
-</tr>
-</tbody></table>
-<ul>
-<li>兼容新版本HadoopAPI的创建操作</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th align="center">API</th>
-<th align="center">键类型</th>
-<th align="center">值类型</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">newAPIHadoopFile[K, V, F &lt;: InputFormat[K, V]](path: String, fClass: Class[F], kClass: Class[K], vClass: Class[V], conf: Configuration = hadoopConfiguration): RDD[(K, V)]</td>
-<td align="center">K</td>
-<td align="center">V</td>
-</tr>
-<tr>
-<td align="center">newAPIHadoopFile[K, V, F &lt;: InputFormat[K, V]](path: String)(implicit km: ClassTag[K], vm: ClassTag[V], fm: ClassTag[F]): RDD[(K, V)]</td>
-<td align="center">K</td>
-<td align="center">V</td>
-</tr>
-<tr>
-<td align="center">newAPIHadoopRDD[K, V, F &lt;: InputFormat[K, V]](conf: Configuration = hadoopConfiguration, fClass: Class[F], kClass: Class[K], vClass: Class[V]): RDD[(K, V)]</td>
-<td align="center">K</td>
-<td align="center">V</td>
-</tr>
-</tbody></table>
-<h4 id="saveAsNewAPIHadoopFile"><a href="#saveAsNewAPIHadoopFile" class="headerlink" title="* saveAsNewAPIHadoopFile"></a>* saveAsNewAPIHadoopFile</h4><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">scala&gt; <span class="keyword">val</span> data = sc.parallelize(<span class="type">Array</span>((<span class="number">30</span>,<span class="string">"hadoop"</span>), (<span class="number">71</span>,<span class="string">"hive"</span>), (<span class="number">11</span>,<span class="string">"cat"</span>)))</span><br><span class="line">data: org.apache.spark.rdd.<span class="type">RDD</span>[(<span class="type">Int</span>, <span class="type">String</span>)] </span><br><span class="line">            = <span class="type">ParallelCollectionRDD</span>[<span class="number">16</span>] at parallelize at &lt;console&gt;:<span class="number">27</span></span><br><span class="line"></span><br><span class="line">scala&gt; <span class="keyword">import</span> org.apache.hadoop.io._</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.io._</span><br><span class="line"></span><br><span class="line">scala&gt; data.saveAsNewAPIHadoopFile(<span class="string">"</span></span><br><span class="line"><span class="string">hdfs://dt/hadoopfile/"</span>,</span><br><span class="line">classOf[<span class="type">LongWritable</span>],</span><br><span class="line">classOf[<span class="type">Text</span>] ,</span><br><span class="line">classOf[org.apache.hadoop.mapreduce.lib.output.<span class="type">TextOutputFormat</span>[<span class="type">LongWritable</span>, <span class="type">Text</span>]])</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><h4 id="newAPIHadoopFile"><a href="#newAPIHadoopFile" class="headerlink" title="newAPIHadoopFile"></a>newAPIHadoopFile</h4></li>
-</ul>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">scala&gt; <span class="keyword">import</span> org.apache.hadoop.io._</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.io._</span><br><span class="line"></span><br><span class="line">scala&gt; <span class="keyword">val</span> read =  sc.newAPIHadoopFile[ \</span><br><span class="line"><span class="type">LongWritable</span>, \</span><br><span class="line"><span class="type">Text</span>, \</span><br><span class="line">org.apache.hadoop.mapreduce.lib.input.<span class="type">TextInputFormat</span>]( \</span><br><span class="line"><span class="string">"hdfs://dt/hadoopfile/part*"</span>,  \</span><br><span class="line">classOf[org.apache.hadoop.mapreduce.lib.input.<span class="type">TextInputFormat</span>], \</span><br><span class="line">classOf[<span class="type">LongWritable</span>], \</span><br><span class="line">classOf[<span class="type">Text</span>])</span><br><span class="line">read: org.apache.spark.rdd.<span class="type">RDD</span>[(org.apache.hadoop.io.<span class="type">LongWritable</span>, org.apache.hadoop.io.<span class="type">Text</span>)] </span><br><span class="line">= hdfs:<span class="comment">//hadoop102:9000/hadoopfile/part* NewHadoopRDD[18] at newAPIHadoopFile at &lt;console&gt;:33</span></span><br><span class="line"></span><br><span class="line">scala&gt; read.map&#123;<span class="keyword">case</span> (k,v) =&gt; v.toString&#125;.collect</span><br><span class="line">res7: <span class="type">Array</span>[<span class="type">String</span>] = <span class="type">Array</span>(<span class="number">30</span>  hadoop, <span class="number">71</span>  hive, <span class="number">11</span>    cat)</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="Hive"><a href="#Hive" class="headerlink" title="Hive"></a>Hive</h1><ul>
-<li>配置文件</li>
-</ul>
-<p>hive-site.xml配置文件放置在客户端的resources文件夹下</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> spark: <span class="type">SparkSession</span> = <span class="type">SparkSession</span></span><br><span class="line">  .builder()</span><br><span class="line">  .enableHiveSupport()</span><br><span class="line">  .appName(<span class="string">"downloadSyncData"</span>)</span><br><span class="line">  .master(<span class="string">"local[2]"</span>)</span><br><span class="line">  .getOrCreate()</span><br><span class="line"><span class="type">System</span>.setProperty(<span class="string">"hadoop.home.dir"</span>,<span class="string">"/home/deep/bigdata/hadoop-3.2.1"</span>)</span><br><span class="line">spark.sql(<span class="string">"select * from bigdata.schema_test"</span>).show()</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="MySQL"><a href="#MySQL" class="headerlink" title="MySQL"></a>MySQL</h1><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">scala&gt; <span class="keyword">val</span> rdd = <span class="keyword">new</span> org.apache.spark.rdd.<span class="type">JdbcRDD</span>(sc, () =&gt; &#123;</span><br><span class="line">     |       <span class="type">Class</span>.forName(<span class="string">"com.mysql.jdbc.Driver"</span>)</span><br><span class="line">     |       java.sql.<span class="type">DriverManager</span>.getConnection(<span class="string">"jdbc:mysql://host:port/db"</span>, <span class="string">"username"</span>, <span class="string">"password"</span>) </span><br><span class="line">     |     &#125;,</span><br><span class="line">     |       <span class="string">"select * from `table` where id &gt;= ? and id &lt;= ?;"</span>,</span><br><span class="line">     |       <span class="number">1</span>,</span><br><span class="line">     |       <span class="number">10</span>,</span><br><span class="line">     |       <span class="number">1</span>,</span><br><span class="line">     |       r =&gt; (r.getInt(<span class="number">1</span>), r.getString(<span class="number">2</span>))</span><br><span class="line">     |     )</span><br><span class="line">rdd: org.apache.spark.rdd.<span class="type">JdbcRDD</span>[(<span class="type">Int</span>, <span class="type">String</span>)] = <span class="type">JdbcRDD</span>[<span class="number">1</span>] at <span class="type">JdbcRDD</span> at &lt;console&gt;:<span class="number">24</span></span><br><span class="line"></span><br><span class="line">scala&gt; println(rdd.count())</span><br></pre></td></tr></table></figure>
-
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/02/15/Spark%E6%95%B0%E6%8D%AE%E8%AF%BB%E5%8F%96%E4%B8%8E%E4%BF%9D%E5%AD%98/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1718,7 +1562,7 @@
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">&lt;i class&#x3D;&quot;fa fa-angle-right&quot;&gt;&lt;&#x2F;i&gt;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-hand-o-right" aria-label="accessibility.next_page"></i></a>
   </nav>
 
 
